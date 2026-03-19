@@ -1,9 +1,9 @@
 {
-  "name": "BreachSignal",
-  "short_name": "BreachSignal",
+  "name": "611 Cayli - Odemis",
+  "short_name": "611 Otobus",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#edf3ff",
-  "theme_color": "#10233d",
-  "description": "Privacy-first static breach check launcher for email addresses and phone numbers."
+  "background_color": "#f7f0e7",
+  "theme_color": "#c84e2d",
+  "description": "611 hattinda bir sonraki kalkisi ve tahmini yakin duragi gosteren telefon uyumlu sayfa."
 }

@@ -652,6 +652,24 @@
       };
     }
 
+    function getActiveTrip(route, dayType, direction, referenceMinutes) {
+      const departures = route.schedule[dayType][direction];
+      const latest = [...departures].reverse().find((item) => toMinutes(item) <= referenceMinutes);
+      if (!latest) return null;
+
+      const departureMinutes = toMinutes(latest);
+      const total = route.tripMinutes[dayType][direction];
+      const elapsed = referenceMinutes - departureMinutes;
+
+      if (elapsed < 0 || elapsed > total) return null;
+
+      return {
+        departure: latest,
+        elapsed,
+        remaining: Math.max(0, total - elapsed)
+      };
+    }
+
     function weatherLabel(code) {
       if (code === 0) return "Acik";
       if (code === 1) return "Az bulutlu";
@@ -711,18 +729,19 @@
       const departures = route.schedule[dayType][direction];
       const labels = route.labels[direction];
       const reference = getReference(now);
-      const next = departures.find((item) => toMinutes(item) >= reference.minutes);
-      const nextThree = departures.filter((item) => toMinutes(item) >= reference.minutes).slice(0, 3);
+      const activeTrip = getActiveTrip(route, dayType, direction, reference.minutes);
+      const next = departures.find((item) => toMinutes(item) > reference.minutes);
+      const nextThree = departures.filter((item) => toMinutes(item) > reference.minutes).slice(0, 3);
       const estimate = estimateStop(route, dayType, direction, reference.minutes);
 
       renderRouteMeta(route);
 
       let nextHtml = "";
-      if (next) {
+      if (activeTrip) {
         nextHtml = `
           <div>
-            <p class="subtitle">Sonraki kalkis</p>
-            <div class="big">${next}</div>
+            <p class="subtitle">Anlik kalkisa gore aktif sefer</p>
+            <div class="big">${activeTrip.departure}</div>
           </div>
           <div class="meta">
             <div class="box">
@@ -730,8 +749,16 @@
               <strong>${reference.text}</strong>
             </div>
             <div class="box">
-              <small>Kalan sure</small>
-              <strong>${waitText(toMinutes(next) - reference.minutes)}</strong>
+              <small>Yolda kalma suresi</small>
+              <strong>${waitText(activeTrip.elapsed)}</strong>
+            </div>
+            <div class="box">
+              <small>Tahmini kalan yol</small>
+              <strong>${waitText(activeTrip.remaining)}</strong>
+            </div>
+            <div class="box">
+              <small>Siradaki kalkis</small>
+              <strong>${next || "Bugun bitti"}</strong>
             </div>
           </div>
           <div>
@@ -747,14 +774,11 @@
           </div>
         `;
       } else {
-        const tomorrow = new Date(now);
-        tomorrow.setDate(now.getDate() + 1);
-        const tomorrowType = getDayType(tomorrow);
-        const firstTomorrow = route.schedule[tomorrowType][direction][0];
         nextHtml = `
           <div class="box">
-            <small>Sonraki sefer</small>
-            <strong>Bugunku son sefer gecmis. Bir sonraki sefer yarin ${firstTomorrow}.</strong>
+            <small>Anlik kalkis durumu</small>
+            <strong>Su anda yolda oldugu tahmin edilen bir arac yok.</strong>
+            <p class="subtitle">${next ? `Siradaki kalkis ${next}.` : "Bugunku seferler bitmis gorunuyor."}</p>
           </div>
         `;
       }
@@ -777,7 +801,7 @@
         <div class="pill">${dayLabels[dayType]} &bull; ${labels.from} -> ${labels.to}</div>
         ${nextHtml}
         ${estimateHtml}
-        <p class="note">611 saatleri eski surumden korundu. 796 Beydag - Odemis saatleri resmi ESHOT sayfasina gore eklendi.</p>
+        <p class="note">Artik odak sonraki kalkis degil, su an yolda oldugu varsayilan aktif kalkistir. 796 Beydag - Odemis saatleri resmi ESHOT sayfasina gore eklendi.</p>
       `;
     }
 

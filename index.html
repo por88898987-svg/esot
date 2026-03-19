@@ -51,28 +51,80 @@
       box-shadow: var(--shadow);
     }
 
-    .hero h1 {
-      margin: 0;
-      font-size: 1.95rem;
-      line-height: 0.98;
+    .hero-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-panel {
+      padding: 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 248, 243, 0.18);
+      background: rgba(255, 248, 243, 0.1);
+    }
+
+    .hero-title {
+      margin: 0 0 10px;
+      font-size: 1.28rem;
+      line-height: 1.1;
       letter-spacing: -0.03em;
     }
 
-    .hero p {
-      margin: 10px 0 0;
+    .hero-subtitle {
+      margin: 0;
       line-height: 1.5;
-      color: rgba(255, 248, 243, 0.92);
+      color: rgba(255, 248, 243, 0.88);
     }
 
-    .hero-tag {
+    .hero-weather {
+      margin: 6px 0 0;
+      font-size: 3rem;
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .hero-pill {
       display: inline-flex;
-      margin-top: 14px;
-      padding: 8px 12px;
+      align-items: center;
+      padding: 8px 11px;
       border-radius: 999px;
-      background: rgba(255, 248, 243, 0.14);
-      font-size: 0.88rem;
+      background: rgba(255, 248, 243, 0.16);
+      font-size: 0.85rem;
       font-weight: 700;
-      letter-spacing: 0.03em;
+    }
+
+    .hero-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .hero-link {
+      display: block;
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 248, 243, 0.18);
+      background: rgba(255, 248, 243, 0.08);
+      color: #fff8f3;
+      text-decoration: none;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .hero-link small {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255, 248, 243, 0.78);
+      font-weight: 600;
     }
 
     .stack {
@@ -345,14 +397,46 @@
       font-weight: 900;
       color: var(--brand-deep);
     }
+
+    @media (min-width: 640px) {
+      .hero-grid {
+        grid-template-columns: 1.05fr 0.95fr;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="shell">
     <section class="hero">
-      <h1 id="heroTitle">611 CAYLI<br>ODEMIS</h1>
-      <p id="heroText">Telefonda tek ekranda kullanmak icin hazirlandi. Bulundugu yere gore sonraki kalkisi bulur ve tarife bazli tahmini yakin duragi gosterir.</p>
-      <div class="hero-tag" id="heroTag">611 ve 796 tek sayfada</div>
+      <div class="hero-grid">
+        <div class="hero-panel">
+          <p class="eyebrow" style="color: rgba(255, 248, 243, 0.74); margin-bottom: 8px;">Odemis Simdi</p>
+          <h1 class="hero-title">Anlik hava ve hizli bilgi</h1>
+          <p class="hero-weather" id="weatherTemp">--</p>
+          <p class="hero-subtitle" id="weatherSummary">Anlik hava verisi yukleniyor...</p>
+          <div class="hero-meta">
+            <span class="hero-pill" id="weatherTime">Canli</span>
+            <span class="hero-pill" id="weatherFeels">Hissedilen --</span>
+            <span class="hero-pill" id="weatherHumidity">Nem --</span>
+            <span class="hero-pill" id="weatherWind">Ruzgar --</span>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <p class="eyebrow" style="color: rgba(255, 248, 243, 0.74); margin-bottom: 8px;">Resmi Baglantilar</p>
+          <h2 class="hero-title" style="font-size: 1.1rem;">Duyuru ve etkinlik icin en mantikli alan</h2>
+          <p class="hero-subtitle">Gunun haberi yerine resmi kaynaklara hizli erisim daha guvenilir. Odemis Belediyesi ve ESHOT duyurulari burada dursun.</p>
+          <div class="hero-links">
+            <a class="hero-link" href="https://www.odemis.bel.tr/haberler/duyuru" target="_blank" rel="noopener noreferrer">
+              Odemis Belediyesi Duyuru
+              <small>Yerel duyuru ve etkinlikleri resmi kaynaktan kontrol et.</small>
+            </a>
+            <a class="hero-link" href="https://www.eshot.gov.tr/tr/Duyurular/5353/94" target="_blank" rel="noopener noreferrer">
+              ESHOT Duyurular
+              <small>Guzergah ve sefer degisikliklerini resmi sayfadan gor.</small>
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="stack">
@@ -413,35 +497,6 @@
       <button class="btn primary" id="findBtn">Sonraki otobusu bul</button>
 
       <div class="card result" id="result"></div>
-
-      <div class="card">
-        <div class="row">
-          <div>
-            <p class="eyebrow">Odemis Hava</p>
-            <p class="weather-value" id="weatherTemp">--</p>
-            <p class="subtitle" id="weatherSummary">Anlik hava verisi yukleniyor...</p>
-          </div>
-          <div class="pill" id="weatherTime">Canli</div>
-        </div>
-        <div class="meta">
-          <div class="box">
-            <small>Hissedilen</small>
-            <strong id="weatherFeels">--</strong>
-          </div>
-          <div class="box">
-            <small>Nem</small>
-            <strong id="weatherHumidity">--</strong>
-          </div>
-          <div class="box">
-            <small>Ruzgar</small>
-            <strong id="weatherWind">--</strong>
-          </div>
-          <div class="box">
-            <small>Konum</small>
-            <strong>Odemis</strong>
-          </div>
-        </div>
-      </div>
 
       <div class="card driver-card" id="driverCard">
         <p class="eyebrow">Gizli Surpriz</p>
@@ -558,9 +613,6 @@
       sunday: "Pazar"
     };
 
-    const heroTitle = document.getElementById("heroTitle");
-    const heroText = document.getElementById("heroText");
-    const heroTag = document.getElementById("heroTag");
     const dirForwardTitle = document.getElementById("dirForwardTitle");
     const dirForwardText = document.getElementById("dirForwardText");
     const dirReverseTitle = document.getElementById("dirReverseTitle");
@@ -692,25 +744,21 @@
         const current = data.current;
         weatherTemp.textContent = current.temperature_2m + " C";
         weatherSummary.textContent = weatherLabel(current.weather_code);
-        weatherFeels.textContent = current.apparent_temperature + " C";
-        weatherHumidity.textContent = current.relative_humidity_2m + "%";
-        weatherWind.textContent = current.wind_speed_10m + " km/h";
+        weatherFeels.textContent = "Hissedilen " + current.apparent_temperature + " C";
+        weatherHumidity.textContent = "Nem " + current.relative_humidity_2m + "%";
+        weatherWind.textContent = "Ruzgar " + current.wind_speed_10m + " km/h";
         weatherTime.textContent = current.time.slice(11, 16);
       } catch (error) {
         weatherTemp.textContent = "--";
         weatherSummary.textContent = "Anlik hava bilgisi simdi alinmadi.";
-        weatherFeels.textContent = "--";
-        weatherHumidity.textContent = "--";
-        weatherWind.textContent = "--";
+        weatherFeels.textContent = "Hissedilen --";
+        weatherHumidity.textContent = "Nem --";
+        weatherWind.textContent = "Ruzgar --";
         weatherTime.textContent = "Baglanti";
       }
     }
 
     function renderRouteMeta(route) {
-      heroTitle.innerHTML = route.heroTitle;
-      heroText.textContent = route.heroText;
-      heroTag.textContent = route.heroTag;
-
       dirForwardTitle.textContent = route.directionCopy.forwardTitle;
       dirForwardText.textContent = route.directionCopy.forwardText;
       dirReverseTitle.textContent = route.directionCopy.reverseTitle;

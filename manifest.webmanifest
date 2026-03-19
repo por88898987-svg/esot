@@ -1,0 +1,9 @@
+{
+  "name": "BreachSignal",
+  "short_name": "BreachSignal",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#edf3ff",
+  "theme_color": "#10233d",
+  "description": "Privacy-first static breach check launcher for email addresses and phone numbers."
+}

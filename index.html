@@ -1,542 +1,732 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#c84e2d">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="611 Otobus">
-  <title>611 CAYLI - ODEMIS</title>
+  <meta name="theme-color" content="#10233d">
+  <meta name="description" content="A privacy-first static site that helps users check email addresses and phone numbers against official breach-report services.">
+  <title>BreachSignal</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <style>
     :root {
-      --bg: #f5ebda;
-      --card: rgba(255, 250, 243, 0.96);
-      --ink: #201a16;
-      --muted: #6d6256;
-      --line: #dfcfba;
-      --brand: #c84e2d;
-      --brand-deep: #9d3519;
-      --accent: #165f68;
-      --soft: #f1e4d3;
-      --shadow: 0 18px 38px rgba(78, 45, 18, 0.12);
-      --radius: 24px;
+      --bg: #edf3ff;
+      --bg-deep: #dce7ff;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-strong: rgba(255, 255, 255, 0.96);
+      --ink: #11203a;
+      --muted: #586b89;
+      --line: rgba(17, 32, 58, 0.12);
+      --brand: #0f5fe3;
+      --brand-deep: #0d3f99;
+      --accent: #0d8b7c;
+      --warn: #b96d18;
+      --ok: #11795b;
+      --shadow: 0 18px 54px rgba(16, 35, 61, 0.14);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --font-ui: "Aptos", "Segoe UI Variable", "Trebuchet MS", sans-serif;
+      --font-display: "Georgia", "Times New Roman", serif;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(200, 78, 45, 0.18), transparent 34%),
-        radial-gradient(circle at top right, rgba(22, 95, 104, 0.14), transparent 28%),
-        linear-gradient(180deg, #f7f0e7 0%, #efe2cd 100%);
       color: var(--ink);
+      font-family: var(--font-ui);
+      background:
+        radial-gradient(circle at top left, rgba(15, 95, 227, 0.18), transparent 32%),
+        radial-gradient(circle at 85% 10%, rgba(13, 139, 124, 0.16), transparent 26%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
     }
 
-    .shell {
-      width: min(100%, 560px);
+    .page {
+      width: min(100% - 32px, 1120px);
       margin: 0 auto;
-      padding: 16px 14px 26px;
+      padding: 28px 0 52px;
     }
 
     .hero {
-      padding: 22px 18px;
-      border-radius: 28px;
-      color: #fff8f3;
-      background: linear-gradient(135deg, rgba(200, 78, 45, 0.97), rgba(156, 51, 23, 0.98));
-      box-shadow: var(--shadow);
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: 1.95rem;
-      line-height: 0.98;
-      letter-spacing: -0.03em;
-    }
-
-    .hero p {
-      margin: 10px 0 0;
-      line-height: 1.5;
-      color: rgba(255, 248, 243, 0.92);
-    }
-
-    .stack {
-      display: grid;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(223, 207, 186, 0.95);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: 0 10px 22px rgba(61, 41, 25, 0.06);
-    }
-
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .choices {
-      display: grid;
-      gap: 10px;
-    }
-
-    .choice {
       position: relative;
+      overflow: hidden;
+      padding: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 34px;
+      background:
+        linear-gradient(135deg, rgba(16, 35, 61, 0.96), rgba(14, 87, 159, 0.9)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+      box-shadow: var(--shadow);
+      color: #f6f9ff;
     }
 
-    .choice input {
+    .hero::after {
+      content: "";
       position: absolute;
-      opacity: 0;
+      inset: auto -80px -90px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.24), rgba(255,255,255,0));
       pointer-events: none;
     }
 
-    .choice label {
-      display: block;
-      min-height: 84px;
-      padding: 15px;
-      border-radius: 20px;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 16px 0 10px;
+      max-width: 11ch;
+      font-family: var(--font-display);
+      font-size: clamp(2.7rem, 9vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      max-width: 62ch;
+      margin: 0;
+      color: rgba(246, 249, 255, 0.88);
+      line-height: 1.65;
+      font-size: 1.02rem;
+    }
+
+    .hero-grid,
+    .content-grid,
+    .actions {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.6fr 0.95fr;
+      align-items: end;
+      margin-top: 22px;
+    }
+
+    .content-grid {
+      grid-template-columns: 1.35fr 0.95fr;
+      margin-top: 20px;
+      align-items: start;
+    }
+
+    .card {
       border: 1px solid var(--line);
-      background: #fff;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: 0 10px 32px rgba(16, 35, 61, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-stat {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 2.5rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 6px;
+      color: rgba(246, 249, 255, 0.82);
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .section-label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .section-text {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .switcher {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+      padding: 8px;
+      border-radius: 20px;
+      background: rgba(16, 35, 61, 0.05);
+    }
+
+    .switcher button,
+    .btn,
+    .link-btn {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .switcher button {
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      color: var(--muted);
+      background: transparent;
       transition: 0.18s ease;
     }
 
-    .choice input:checked + label {
-      border-color: var(--brand);
-      background: #fff1ea;
-      box-shadow: inset 0 0 0 1px rgba(200, 78, 45, 0.18);
+    .switcher button.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      box-shadow: 0 12px 28px rgba(15, 95, 227, 0.24);
     }
 
-    .choice strong {
+    form {
+      margin-top: 18px;
+    }
+
+    .label {
       display: block;
-      margin-bottom: 6px;
-      font-size: 1rem;
+      margin-bottom: 10px;
+      font-weight: 700;
     }
 
-    .choice span {
-      display: block;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .switch {
-      width: 54px;
-      height: 32px;
-      border: 0;
-      border-radius: 999px;
-      background: #d7c6b3;
-      position: relative;
-      padding: 0;
-      cursor: pointer;
-    }
-
-    .switch::after {
-      content: "";
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-      transition: transform 0.18s ease;
-    }
-
-    .switch.on {
-      background: rgba(22, 95, 104, 0.88);
-    }
-
-    .switch.on::after {
-      transform: translateX(22px);
-    }
-
-    .time-wrap {
-      display: none;
-      margin-top: 12px;
-    }
-
-    .time-wrap.show {
-      display: block;
-    }
-
-    input[type="time"] {
+    .field {
       width: 100%;
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--ink);
+      padding: 16px 18px;
+      border: 1px solid rgba(17, 32, 58, 0.12);
+      border-radius: 18px;
+      background: var(--surface-strong);
       font-size: 1rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .field:focus {
+      border-color: rgba(15, 95, 227, 0.45);
+      box-shadow: 0 0 0 4px rgba(15, 95, 227, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .hint,
+    .small-note {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .hint {
+      margin: 10px 0 0;
+      font-size: 0.96rem;
+    }
+
+    .actions {
+      grid-template-columns: 1.1fr 1fr;
+      margin-top: 18px;
     }
 
     .btn {
-      width: 100%;
-      border: 0;
-      border-radius: 20px;
-      padding: 15px 18px;
-      text-align: center;
-      font-size: 1rem;
+      min-height: 54px;
+      padding: 14px 18px;
+      border-radius: 18px;
       font-weight: 800;
-      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover,
+    .link-btn:hover {
+      transform: translateY(-1px);
     }
 
     .btn.primary {
       color: #fff;
-      background: linear-gradient(135deg, var(--accent), #0e464c);
-      box-shadow: 0 12px 26px rgba(14, 70, 76, 0.2);
+      background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      box-shadow: 0 12px 28px rgba(15, 95, 227, 0.22);
     }
 
     .btn.secondary {
-      color: var(--accent);
-      background: #fff;
-      border: 1px solid rgba(22, 95, 104, 0.18);
+      color: var(--ink);
+      background: rgba(16, 35, 61, 0.06);
     }
 
-    .result {
+    .status {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(17, 32, 58, 0.08);
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .status.good {
+      border-color: rgba(17, 121, 91, 0.18);
+      background: rgba(17, 121, 91, 0.08);
+      color: var(--ok);
+    }
+
+    .status.warn {
+      border-color: rgba(185, 109, 24, 0.24);
+      background: rgba(185, 109, 24, 0.08);
+      color: var(--warn);
+    }
+
+    .provider-list,
+    .steps,
+    .facts {
       display: grid;
       gap: 14px;
     }
 
-    .pill {
-      display: inline-flex;
-      width: fit-content;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--soft);
-      color: #6d4f34;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .subtitle {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .big {
-      margin: 4px 0 0;
-      font-size: 4rem;
-      line-height: 0.92;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      color: var(--brand-deep);
-    }
-
-    .meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .box {
-      background: #fff;
+    .provider {
+      padding: 18px;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 13px;
+      border-radius: 22px;
+      background: var(--surface-strong);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .box small {
-      display: block;
-      color: var(--muted);
-      margin-bottom: 6px;
+    .provider:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(16, 35, 61, 0.08);
     }
 
-    .box strong {
-      font-size: 1.02rem;
-      line-height: 1.45;
-    }
-
-    .queue {
-      display: grid;
-      gap: 8px;
-    }
-
-    .queue-item {
+    .provider-head {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 12px;
-      background: #fff;
+      align-items: center;
+    }
+
+    .provider h3,
+    .fact-title {
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: rgba(16, 35, 61, 0.07);
+      color: var(--brand-deep);
+      white-space: nowrap;
+    }
+
+    .provider p,
+    .fact-copy,
+    .steps li {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 14px;
+      margin-top: 14px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #0f6c67);
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(13, 139, 124, 0.18);
+    }
+
+    .facts {
+      margin-top: 16px;
+    }
+
+    .fact {
+      padding: 16px 18px;
       border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 12px 14px;
-      font-weight: 700;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.65);
     }
 
-    .queue-item span:last-child {
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 0.92rem;
+    .steps {
+      margin: 16px 0 0;
+      padding-left: 20px;
     }
 
-    .note {
+    .footer {
+      margin-top: 20px;
+      padding: 18px 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
       color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.55;
+      line-height: 1.6;
+    }
+
+    .reveal {
+      animation: rise 0.55s ease both;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid,
+      .content-grid,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .page {
+        width: min(100% - 20px, 1120px);
+        padding-top: 18px;
+      }
+
+      .hero,
+      .panel {
+        padding: 22px;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <section class="hero">
-      <h1>611 CAYLI<br>ODEMIS</h1>
-      <p>Telefonda tek ekranda kullanmak icin hazirlandi. Bulundugu yere gore sonraki kalkisi bulur ve tarife bazli tahmini yakin duragi gosterir.</p>
+  <main class="page">
+    <section class="hero reveal">
+      <span class="eyebrow">Privacy-first static checker</span>
+      <div class="hero-grid">
+        <div>
+          <h1>BreachSignal</h1>
+          <p>
+            A GitHub Pages-ready helper that guides users to the right official breach tools without storing their data.
+            The site validates the entry locally in the browser, then sends the user only to trusted providers.
+          </p>
+        </div>
+        <div class="hero-stat">
+          <strong>0</strong>
+          <span>server-side logs by default. Everything on this page runs in the browser.</span>
+        </div>
+      </div>
     </section>
 
-    <section class="stack">
-      <div class="card">
-        <p class="eyebrow">Neredesin?</p>
-        <div class="choices">
-          <div class="choice">
-            <input type="radio" id="dir-cayli" name="dir" value="cayli" checked>
-            <label for="dir-cayli">
-              <strong>Su an Cayli'dayim</strong>
-              <span>Cayli cikisli, Odemis yonune giden sonraki otobusu bulur.</span>
-            </label>
+    <section class="content-grid">
+      <article class="card panel reveal">
+        <p class="section-label">Check Input</p>
+        <h2 class="section-title">Choose what you want to scan</h2>
+        <p class="section-text">
+          Email addresses work best with breach-search tools. Phone numbers are usually handled by monitoring products
+          that verify ownership first.
+        </p>
+
+        <div class="switcher" role="tablist" aria-label="Input type">
+          <button id="emailTab" class="active" type="button" data-mode="email" aria-selected="true">Email address</button>
+          <button id="phoneTab" type="button" data-mode="phone" aria-selected="false">Phone number</button>
+        </div>
+
+        <form id="scanForm" novalidate>
+          <label class="label" id="inputLabel" for="queryInput">Email address</label>
+          <input
+            id="queryInput"
+            class="field"
+            type="email"
+            inputmode="email"
+            autocomplete="off"
+            placeholder="name@example.com"
+            aria-describedby="inputHint"
+          >
+          <p id="inputHint" class="hint">Nothing is uploaded anywhere from this page. Validation stays local.</p>
+
+          <div class="actions">
+            <button class="btn primary" type="submit">Prepare official checks</button>
+            <button class="btn secondary" id="copyButton" type="button">Copy value</button>
           </div>
-          <div class="choice">
-            <input type="radio" id="dir-odemis" name="dir" value="odemis">
-            <label for="dir-odemis">
-              <strong>Su an Odemis'teyim</strong>
-              <span>Odemis cikisli, Cayli yonune giden sonraki otobusu bulur.</span>
-            </label>
+        </form>
+
+        <div id="status" class="status">
+          Enter an email address or phone number, then this page will recommend the safest official services to use.
+        </div>
+
+        <div class="facts">
+          <div class="fact">
+            <h3 class="fact-title">Why this design?</h3>
+            <p class="fact-copy">
+              Public static hosting is perfect for the interface, but real breach APIs often require keys, rate limits,
+              or verified ownership. This site avoids pretending otherwise.
+            </p>
+          </div>
+          <div class="fact">
+            <h3 class="fact-title">GitHub Pages friendly</h3>
+            <p class="fact-copy">
+              No build step, no backend, and no dependency install. Drop the folder into a repository and publish.
+            </p>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="card">
-        <p class="eyebrow">Saat</p>
-        <div class="row">
-          <div>
-            <strong>Su anki saati kullan</strong>
-            <p class="subtitle">Kapatirsan ornek saat secip bakabilirsin.</p>
+      <aside class="card panel reveal">
+        <p class="section-label">Recommended Services</p>
+        <h2 class="section-title">Provider shortlist</h2>
+        <p class="section-text">
+          The cards below change based on whether the input looks like an email address or a phone number.
+        </p>
+
+        <div id="providerList" class="provider-list"></div>
+
+        <div class="facts">
+          <div class="fact">
+            <h3 class="fact-title">Good privacy baseline</h3>
+            <p class="fact-copy">
+              Keep the site static, avoid analytics, and do not proxy user identifiers through your own server unless you
+              truly need an authenticated API integration.
+            </p>
           </div>
-          <button type="button" class="switch on" id="timeSwitch" aria-label="Saat secimini degistir"></button>
         </div>
-        <div class="time-wrap" id="timeWrap">
-          <input type="time" id="customTime" value="10:00">
-        </div>
-      </div>
-
-      <button class="btn primary" id="findBtn">Sonraki otobusu bul</button>
-
-      <div class="card result" id="result"></div>
-
-      <div class="card">
-        <p class="eyebrow">Canli Kontrol</p>
-        <a class="btn secondary" href="https://www.eshot.gov.tr/tr/OtobusumNerede/290" target="_blank" rel="noopener noreferrer">Resmi Otobusum Nerede sayfasini ac</a>
-        <p class="note">Bu uygulamadaki "hangi durakta" bilgisi tarife bazli tahmindir. Canli durum icin resmi sayfayi da ekledim.</p>
-      </div>
+      </aside>
     </section>
+
+    <section class="card panel reveal">
+      <p class="section-label">How to ship it</p>
+      <h2 class="section-title">Three-step publish flow</h2>
+      <ol class="steps">
+        <li>Create a new GitHub repository and upload this folder.</li>
+        <li>In repository settings, enable GitHub Pages for the root or main branch.</li>
+        <li>Open the published URL and test both the email and phone flows on mobile and desktop.</li>
+      </ol>
+    </section>
+
+    <footer class="footer reveal">
+      This project is a guided breach-check launcher, not a hidden scanner. If you later want direct email breach lookups,
+      we can add an optional API-backed mode behind a small serverless function and a private key.
+    </footer>
   </main>
 
   <script>
-    const schedule = {
-      workday: {
-        cayli: ["06:00","06:35","07:10","07:45","08:20","08:55","09:30","10:05","10:40","11:15","11:50","12:25","13:00","13:35","14:10","14:45","15:20","15:55","16:30","17:05","17:40","18:20","18:50","19:40","20:30","21:20"],
-        odemis: ["06:55","07:25","08:00","08:35","09:08","09:50","10:20","10:55","11:30","12:05","12:40","13:15","13:55","14:25","15:00","15:40","16:10","16:45","17:25","18:00","18:30","19:10","19:50","20:30","21:20","22:10"]
+    const services = {
+      email: [
+        {
+          name: "Have I Been Pwned",
+          badge: "Best for email",
+          copy: "Popular breach search for email addresses. Strong for checking whether an email appears in known breach datasets.",
+          href: "https://haveibeenpwned.com/"
+        },
+        {
+          name: "Mozilla Monitor",
+          badge: "Free monitor",
+          copy: "Helpful for ongoing email monitoring and breach notifications with a clean user flow.",
+          href: "https://monitor.mozilla.org/"
+        },
+        {
+          name: "Google One Dark Web Report",
+          badge: "Google account",
+          copy: "Useful if the user already relies on a Google account and wants a guided monitoring profile.",
+          href: "https://one.google.com/about/dark-web-report"
+        }
+      ],
+      phone: [
+        {
+          name: "Google One Dark Web Report",
+          badge: "Best for phone",
+          copy: "Supports phone-number monitoring with ownership verification, which is a safer pattern than open anonymous searching.",
+          href: "https://one.google.com/about/dark-web-report"
+        },
+        {
+          name: "Mozilla Monitor",
+          badge: "Profile-based",
+          copy: "Lets users maintain a monitoring profile and can be part of an ongoing privacy workflow.",
+          href: "https://monitor.mozilla.org/"
+        }
+      ]
+    };
+
+    const modes = {
+      email: {
+        label: "Email address",
+        placeholder: "name@example.com",
+        hint: "Nothing is uploaded anywhere from this page. Validation stays local.",
+        inputMode: "email",
+        type: "email"
       },
-      saturday: {
-        cayli: ["07:50","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50"],
-        odemis: ["08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:40"]
-      },
-      sunday: {
-        cayli: ["07:50","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50"],
-        odemis: ["08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:40"]
+      phone: {
+        label: "Phone number",
+        placeholder: "+905551112233",
+        hint: "Use international format when possible. This page only normalizes the value locally.",
+        inputMode: "tel",
+        type: "tel"
       }
     };
 
-    const routeStops = {
-      cayli: ["Cayli Cikis","Cayli Meydan","Medeniyet","Odemis Cezaevi","Kaymakci Kopru","Kaymakci Ucyol","Kurucaova","Ertugrulkoy","Gereli","Buyukavulcuk","Odemis Nikah Sarayi","Odemis Garaj","Odemis Son Durak"],
-      odemis: ["Odemis Son Durak","Odemis Garaj","Odemis Nikah Sarayi","Buyukavulcuk","Gereli","Ertugrulkoy","Kurucaova","Kaymakci Ucyol","Kaymakci Kopru","Odemis Cezaevi","Medeniyet","Cayli Meydan","Cayli Cikis"]
-    };
+    let currentMode = "email";
 
-    const tripMinutes = {
-      workday: { cayli: 55, odemis: 55 },
-      saturday: { cayli: 50, odemis: 50 },
-      sunday: { cayli: 50, odemis: 50 }
-    };
+    const emailTab = document.getElementById("emailTab");
+    const phoneTab = document.getElementById("phoneTab");
+    const providerList = document.getElementById("providerList");
+    const inputLabel = document.getElementById("inputLabel");
+    const queryInput = document.getElementById("queryInput");
+    const inputHint = document.getElementById("inputHint");
+    const status = document.getElementById("status");
+    const form = document.getElementById("scanForm");
+    const copyButton = document.getElementById("copyButton");
 
-    const labels = {
-      cayli: { from: "Cayli", to: "Odemis" },
-      odemis: { from: "Odemis", to: "Cayli" },
-      workday: "Is gunu",
-      saturday: "Cumartesi",
-      sunday: "Pazar"
-    };
-
-    const timeSwitch = document.getElementById("timeSwitch");
-    const timeWrap = document.getElementById("timeWrap");
-    const customTime = document.getElementById("customTime");
-    const result = document.getElementById("result");
-    let useNow = true;
-
-    function getDayType(date) {
-      const day = date.getDay();
-      if (day === 0) return "sunday";
-      if (day === 6) return "saturday";
-      return "workday";
+    function renderProviders(mode) {
+      providerList.innerHTML = "";
+      services[mode].forEach((service, index) => {
+        const article = document.createElement("article");
+        article.className = "provider reveal";
+        article.style.animationDelay = `${index * 70}ms`;
+        article.innerHTML = `
+          <div class="provider-head">
+            <h3>${service.name}</h3>
+            <span class="pill">${service.badge}</span>
+          </div>
+          <p>${service.copy}</p>
+          <a class="link-btn" href="${service.href}" target="_blank" rel="noreferrer">Open official site</a>
+        `;
+        providerList.appendChild(article);
+      });
     }
 
-    function toMinutes(value) {
-      const [h, m] = value.split(":").map(Number);
-      return (h * 60) + m;
+    function switchMode(mode) {
+      currentMode = mode;
+      const config = modes[mode];
+
+      emailTab.classList.toggle("active", mode === "email");
+      emailTab.setAttribute("aria-selected", String(mode === "email"));
+      phoneTab.classList.toggle("active", mode === "phone");
+      phoneTab.setAttribute("aria-selected", String(mode === "phone"));
+
+      inputLabel.textContent = config.label;
+      queryInput.placeholder = config.placeholder;
+      queryInput.inputMode = config.inputMode;
+      queryInput.type = config.type;
+      inputHint.textContent = config.hint;
+      queryInput.value = "";
+      status.className = "status";
+      status.textContent = "Enter a value to see which trusted services fit this input best.";
+      renderProviders(mode);
     }
 
-    function formatClock(date) {
-      return date.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+    function normalizePhone(value) {
+      const trimmed = value.trim();
+      if (!trimmed) return "";
+      const hasPlus = trimmed.startsWith("+");
+      const digits = trimmed.replace(/[^\d]/g, "");
+      return hasPlus ? `+${digits}` : digits;
     }
 
-    function waitText(minutes) {
-      if (minutes <= 0) return "simdi";
-      const h = Math.floor(minutes / 60);
-      const m = minutes % 60;
-      if (h > 0 && m > 0) return h + " saat " + m + " dk sonra";
-      if (h > 0) return h + " saat sonra";
-      return m + " dk sonra";
-    }
-
-    function getDirection() {
-      return document.querySelector('input[name="dir"]:checked').value;
-    }
-
-    function getReference(date) {
-      if (useNow) {
-        return { text: formatClock(date), minutes: date.getHours() * 60 + date.getMinutes() };
+    function validateValue(mode, value) {
+      if (!value.trim()) {
+        return {
+          ok: false,
+          message: "Please enter a value first."
+        };
       }
-      const chosen = customTime.value || "10:00";
-      return { text: chosen, minutes: toMinutes(chosen) };
-    }
 
-    function estimateStop(dayType, direction, referenceMinutes) {
-      const departures = schedule[dayType][direction];
-      const latest = [...departures].reverse().find((item) => toMinutes(item) <= referenceMinutes);
-      if (!latest) return null;
+      if (mode === "email") {
+        const normalized = value.trim().toLowerCase();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(normalized)) {
+          return {
+            ok: false,
+            message: "That does not look like a valid email address."
+          };
+        }
 
-      const departureMinutes = toMinutes(latest);
-      const elapsed = referenceMinutes - departureMinutes;
-      const total = tripMinutes[dayType][direction];
+        return {
+          ok: true,
+          normalized,
+          message: `Email looks valid. Open the provider cards on the right to check ${normalized}.`
+        };
+      }
 
-      if (elapsed < 0 || elapsed > total) return null;
-
-      const stops = routeStops[direction];
-      const ratio = elapsed / total;
-      const index = Math.min(stops.length - 1, Math.round(ratio * (stops.length - 1)));
+      const normalized = normalizePhone(value);
+      const digitsOnly = normalized.replace(/[^\d]/g, "");
+      if (digitsOnly.length < 8) {
+        return {
+          ok: false,
+          message: "Phone number looks too short. Try international format like +905551112233."
+        };
+      }
 
       return {
-        departure: latest,
-        currentStop: stops[index],
-        nextStop: stops[Math.min(stops.length - 1, index + 1)]
+        ok: true,
+        normalized,
+        message: `Phone looks valid. Use a verified monitoring tool to check ${normalized}.`
       };
     }
 
-    function render() {
-      const now = new Date();
-      const dayType = getDayType(now);
-      const direction = getDirection();
-      const departures = schedule[dayType][direction];
-      const reference = getReference(now);
-      const next = departures.find((item) => toMinutes(item) >= reference.minutes);
-      const nextThree = departures.filter((item) => toMinutes(item) >= reference.minutes).slice(0, 3);
-      const estimate = estimateStop(dayType, direction, reference.minutes);
-
-      let nextHtml = "";
-      if (next) {
-        nextHtml = `
-          <div>
-            <p class="subtitle">Sonraki kalkis</p>
-            <div class="big">${next}</div>
-          </div>
-          <div class="meta">
-            <div class="box">
-              <small>Kontrol edilen saat</small>
-              <strong>${reference.text}</strong>
-            </div>
-            <div class="box">
-              <small>Kalan sure</small>
-              <strong>${waitText(toMinutes(next) - reference.minutes)}</strong>
-            </div>
-          </div>
-          <div>
-            <p class="subtitle">Siradaki seferler</p>
-            <div class="queue">
-              ${nextThree.map((item) => `
-                <div class="queue-item">
-                  <span>${item}</span>
-                  <span>${waitText(toMinutes(item) - reference.minutes)}</span>
-                </div>
-              `).join("")}
-            </div>
-          </div>
-        `;
-      } else {
-        const tomorrow = new Date(now);
-        tomorrow.setDate(now.getDate() + 1);
-        const tomorrowType = getDayType(tomorrow);
-        const firstTomorrow = schedule[tomorrowType][direction][0];
-        nextHtml = `
-          <div class="box">
-            <small>Sonraki sefer</small>
-            <strong>Bugunku son sefer gecmis. Bir sonraki sefer yarin ${firstTomorrow}.</strong>
-          </div>
-        `;
+    async function copyValue() {
+      const value = queryInput.value.trim();
+      if (!value) {
+        status.className = "status warn";
+        status.textContent = "Enter a value before copying.";
+        return;
       }
 
-      const estimateHtml = estimate ? `
-        <div class="box">
-          <small>Tahmini yakin durak</small>
-          <strong>${estimate.currentStop}</strong>
-          <p class="subtitle">Bu tahmin ${estimate.departure} kalkisina gore yapildi. Siradaki yakin durak: ${estimate.nextStop}.</p>
-        </div>
-      ` : `
-        <div class="box">
-          <small>Tahmini yakin durak</small>
-          <strong>Bu yonde su an yolda oldugu tahmin edilen bir arac gorunmuyor.</strong>
-          <p class="subtitle">Bu alan canli GPS degil, resmi tarife bazli tahmindir.</p>
-        </div>
-      `;
-
-      result.innerHTML = `
-        <div class="pill">${labels[dayType]} • ${labels[direction].from} -> ${labels[direction].to}</div>
-        ${nextHtml}
-        ${estimateHtml}
-        <p class="note">Saatler resmi 611 sayfasindan alinmistir. Canli ESHOT sayfasina tek tus eklenmistir.</p>
-      `;
+      const normalized = currentMode === "phone" ? normalizePhone(value) : value.trim().toLowerCase();
+      try {
+        await navigator.clipboard.writeText(normalized);
+        status.className = "status good";
+        status.textContent = `Copied ${normalized} to the clipboard.`;
+      } catch (error) {
+        status.className = "status warn";
+        status.textContent = "Clipboard access was blocked in this browser. Select and copy the text manually.";
+      }
     }
 
-    timeSwitch.addEventListener("click", () => {
-      useNow = !useNow;
-      timeSwitch.classList.toggle("on", useNow);
-      timeWrap.classList.toggle("show", !useNow);
-      render();
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const result = validateValue(currentMode, queryInput.value);
+      status.className = result.ok ? "status good" : "status warn";
+      status.textContent = result.message;
     });
 
-    customTime.addEventListener("input", render);
-    document.getElementById("findBtn").addEventListener("click", render);
-    document.querySelectorAll('input[name="dir"]').forEach((input) => input.addEventListener("change", render));
+    copyButton.addEventListener("click", copyValue);
+    emailTab.addEventListener("click", () => switchMode("email"));
+    phoneTab.addEventListener("click", () => switchMode("phone"));
 
-    render();
+    renderProviders(currentMode);
   </script>
 </body>
 </html>

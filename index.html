@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#c84e2d">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="611 Otobus">
-  <title>611 CAYLI - ODEMIS</title>
+  <meta name="apple-mobile-web-app-title" content="Odemis Hatlari">
+  <title>Odemis Hatlari</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <style>
     :root {
@@ -62,6 +62,17 @@
       margin: 10px 0 0;
       line-height: 1.5;
       color: rgba(255, 248, 243, 0.92);
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      margin-top: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 248, 243, 0.14);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
 
     .stack {
@@ -295,31 +306,83 @@
       font-size: 0.92rem;
       line-height: 1.55;
     }
+
+    .driver-card {
+      display: none;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(22, 95, 104, 0.12), rgba(200, 78, 45, 0.12)),
+        var(--card);
+    }
+
+    .driver-card.show {
+      display: block;
+    }
+
+    .driver-wrap {
+      display: grid;
+      gap: 14px;
+    }
+
+    .driver-photo {
+      width: 100%;
+      border-radius: 22px;
+      object-fit: cover;
+      border: 1px solid rgba(223, 207, 186, 0.95);
+      background: #fff;
+    }
+
+    .driver-title {
+      margin: 0 0 8px;
+      font-size: 1.12rem;
+      line-height: 1.35;
+    }
   </style>
 </head>
 <body>
   <main class="shell">
     <section class="hero">
-      <h1>611 CAYLI<br>ODEMIS</h1>
-      <p>Telefonda tek ekranda kullanmak icin hazirlandi. Bulundugu yere gore sonraki kalkisi bulur ve tarife bazli tahmini yakin duragi gosterir.</p>
+      <h1 id="heroTitle">611 CAYLI<br>ODEMIS</h1>
+      <p id="heroText">Telefonda tek ekranda kullanmak icin hazirlandi. Bulundugu yere gore sonraki kalkisi bulur ve tarife bazli tahmini yakin duragi gosterir.</p>
+      <div class="hero-tag" id="heroTag">611 ve 796 tek sayfada</div>
     </section>
 
     <section class="stack">
       <div class="card">
-        <p class="eyebrow">Neredesin?</p>
+        <p class="eyebrow">Hangi hat?</p>
         <div class="choices">
           <div class="choice">
-            <input type="radio" id="dir-cayli" name="dir" value="cayli" checked>
-            <label for="dir-cayli">
-              <strong>Su an Cayli'dayim</strong>
-              <span>Cayli cikisli, Odemis yonune giden sonraki otobusu bulur.</span>
+            <input type="radio" id="route-611" name="route" value="611" checked>
+            <label for="route-611">
+              <strong>611 Cayli - Odemis</strong>
+              <span>Cayli ve Odemis arasindaki seferleri gosterir.</span>
             </label>
           </div>
           <div class="choice">
-            <input type="radio" id="dir-odemis" name="dir" value="odemis">
-            <label for="dir-odemis">
-              <strong>Su an Odemis'teyim</strong>
-              <span>Odemis cikisli, Cayli yonune giden sonraki otobusu bulur.</span>
+            <input type="radio" id="route-796" name="route" value="796">
+            <label for="route-796">
+              <strong>796 Beydag - Odemis</strong>
+              <span>Beydag secenegini de ekledim. Resmi ESHOT saatlerine gore calisir.</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="eyebrow">Neredesin?</p>
+        <div class="choices">
+          <div class="choice">
+            <input type="radio" id="dir-forward" name="dir" value="forward" checked>
+            <label for="dir-forward">
+              <strong id="dirForwardTitle">Su an Cayli'dayim</strong>
+              <span id="dirForwardText">Cayli cikisli, Odemis yonune giden sonraki otobusu bulur.</span>
+            </label>
+          </div>
+          <div class="choice">
+            <input type="radio" id="dir-reverse" name="dir" value="reverse">
+            <label for="dir-reverse">
+              <strong id="dirReverseTitle">Su an Odemis'teyim</strong>
+              <span id="dirReverseText">Odemis cikisli, Cayli yonune giden sonraki otobusu bulur.</span>
             </label>
           </div>
         </div>
@@ -343,53 +406,137 @@
 
       <div class="card result" id="result"></div>
 
+      <div class="card driver-card" id="driverCard">
+        <p class="eyebrow">Gizli Surpriz</p>
+        <div class="driver-wrap">
+          <img class="driver-photo" id="driverPhoto" src="./surprise-driver.jpg" alt="Ozel sofor tasarimi">
+          <div>
+            <h3 class="driver-title">Bu sayfanin gizli surprizi burada acilacak.</h3>
+            <p class="note">Fotografi ekledigin anda bu kart otomatik gorunur. Istersen sevgin icin tatli bir mesaj da beraber koyariz.</p>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
-        <p class="eyebrow">Canli Kontrol</p>
-        <a class="btn secondary" href="https://www.eshot.gov.tr/tr/OtobusumNerede/290" target="_blank" rel="noopener noreferrer">Resmi Otobusum Nerede sayfasini ac</a>
-        <p class="note">Bu uygulamadaki "hangi durakta" bilgisi tarife bazli tahmindir. Canli durum icin resmi sayfayi da ekledim.</p>
+        <p class="eyebrow">Resmi Kontrol</p>
+        <a class="btn secondary" id="officialLink" href="https://www.eshot.gov.tr/tr/OtobusumNerede/290" target="_blank" rel="noopener noreferrer">Resmi sayfayi ac</a>
+        <p class="note" id="officialNote">Bu uygulamadaki "hangi durakta" bilgisi tarife bazli tahmindir. Canli durum icin resmi sayfayi da ekledim.</p>
       </div>
     </section>
   </main>
 
   <script>
-    const schedule = {
-      workday: {
-        cayli: ["06:00","06:35","07:10","07:45","08:20","08:55","09:30","10:05","10:40","11:15","11:50","12:25","13:00","13:35","14:10","14:45","15:20","15:55","16:30","17:05","17:40","18:20","18:50","19:40","20:30","21:20"],
-        odemis: ["06:55","07:25","08:00","08:35","09:08","09:50","10:20","10:55","11:30","12:05","12:40","13:15","13:55","14:25","15:00","15:40","16:10","16:45","17:25","18:00","18:30","19:10","19:50","20:30","21:20","22:10"]
+    const routes = {
+      "611": {
+        heroTitle: "611 CAYLI<br>ODEMIS",
+        heroText: "Telefonda tek ekranda kullanmak icin hazirlandi. Bulundugu yere gore sonraki kalkisi bulur ve tarife bazli tahmini yakin duragi gosterir.",
+        heroTag: "611 ve 796 tek sayfada",
+        directionCopy: {
+          forwardTitle: "Su an Cayli'dayim",
+          forwardText: "Cayli cikisli, Odemis yonune giden sonraki otobusu bulur.",
+          reverseTitle: "Su an Odemis'teyim",
+          reverseText: "Odemis cikisli, Cayli yonune giden sonraki otobusu bulur."
+        },
+        labels: {
+          forward: { from: "Cayli", to: "Odemis" },
+          reverse: { from: "Odemis", to: "Cayli" }
+        },
+        schedule: {
+          workday: {
+            forward: ["06:00","06:35","07:10","07:45","08:20","08:55","09:30","10:05","10:40","11:15","11:50","12:25","13:00","13:35","14:10","14:45","15:20","15:55","16:30","17:05","17:40","18:20","18:50","19:40","20:30","21:20"],
+            reverse: ["06:55","07:25","08:00","08:35","09:08","09:50","10:20","10:55","11:30","12:05","12:40","13:15","13:55","14:25","15:00","15:40","16:10","16:45","17:25","18:00","18:30","19:10","19:50","20:30","21:20","22:10"]
+          },
+          saturday: {
+            forward: ["07:50","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50"],
+            reverse: ["08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:40"]
+          },
+          sunday: {
+            forward: ["07:50","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50"],
+            reverse: ["08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:40"]
+          }
+        },
+        routeStops: {
+          forward: ["Cayli Cikis","Cayli Meydan","Medeniyet","Odemis Cezaevi","Kaymakci Kopru","Kaymakci Ucyol","Kurucaova","Ertugrulkoy","Gereli","Buyukavulcuk","Odemis Nikah Sarayi","Odemis Garaj","Odemis Son Durak"],
+          reverse: ["Odemis Son Durak","Odemis Garaj","Odemis Nikah Sarayi","Buyukavulcuk","Gereli","Ertugrulkoy","Kurucaova","Kaymakci Ucyol","Kaymakci Kopru","Odemis Cezaevi","Medeniyet","Cayli Meydan","Cayli Cikis"]
+        },
+        tripMinutes: {
+          workday: { forward: 55, reverse: 55 },
+          saturday: { forward: 50, reverse: 50 },
+          sunday: { forward: 50, reverse: 50 }
+        },
+        official: {
+          url: "https://www.eshot.gov.tr/tr/OtobusumNerede/290",
+          label: "Resmi Otobusum Nerede sayfasini ac",
+          note: "Bu uygulamadaki \"hangi durakta\" bilgisi tarife bazli tahmindir. Canli durum icin resmi sayfayi da ekledim."
+        }
       },
-      saturday: {
-        cayli: ["07:50","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50"],
-        odemis: ["08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:40"]
-      },
-      sunday: {
-        cayli: ["07:50","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50"],
-        odemis: ["08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:40"]
+      "796": {
+        heroTitle: "796 BEYDAG<br>ODEMIS",
+        heroText: "Beydag secenegini ekledim. Saatler resmi ESHOT 796 sayfasina gore yer alir ve durak alani yine tarife bazli tahmindir.",
+        heroTag: "Beydag secenegi hazir",
+        directionCopy: {
+          forwardTitle: "Su an Beydag'dayim",
+          forwardText: "Beydag cikisli, Odemis yonune giden sonraki otobusu bulur.",
+          reverseTitle: "Su an Odemis'teyim",
+          reverseText: "Odemis cikisli, Beydag yonune giden sonraki otobusu bulur."
+        },
+        labels: {
+          forward: { from: "Beydag", to: "Odemis" },
+          reverse: { from: "Odemis", to: "Beydag" }
+        },
+        schedule: {
+          workday: {
+            forward: ["06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:35","10:10","10:45","11:20","11:55","12:30","13:10","13:40","14:15","14:50","15:25","16:00","16:35","17:10","17:35","18:20","19:05","20:05"],
+            reverse: ["07:00","07:30","08:00","08:30","09:00","09:35","10:10","10:45","11:20","11:55","12:30","13:05","13:40","14:15","14:50","15:25","16:00","16:35","17:10","17:45","18:20","18:55","19:25","20:10","21:30"]
+          },
+          saturday: {
+            forward: ["06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"],
+            reverse: ["07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"]
+          },
+          sunday: {
+            forward: ["06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"],
+            reverse: ["07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"]
+          }
+        },
+        routeStops: {
+          forward: ["Beydag Stadi","Beydag Hastane","Beydag Giris","Beydag Degirmen","Beydag Yol Ayrimi","Odemis Cezaevi","Odemis Nikah Sarayi","Odemis Garaj","Odemis Yeni Garaj"],
+          reverse: ["Odemis Yeni Garaj","Odemis Garaj","Odemis Nikah Sarayi","Odemis Cezaevi","Beydag Yol Ayrimi","Beydag Degirmen","Beydag Giris","Beydag Hastane","Beydag Stadi"]
+        },
+        tripMinutes: {
+          workday: { forward: 60, reverse: 60 },
+          saturday: { forward: 60, reverse: 60 },
+          sunday: { forward: 60, reverse: 60 }
+        },
+        official: {
+          url: "https://www.eshot.gov.tr/tr/UlasimSaatleri/796/288",
+          label: "Resmi 796 saat sayfasini ac",
+          note: "796 hatti resmi ESHOT saat sayfasina baglidir. Bu uygulamadaki durak bilgisi yine tarife bazli tahmindir."
+        }
       }
     };
 
-    const routeStops = {
-      cayli: ["Cayli Cikis","Cayli Meydan","Medeniyet","Odemis Cezaevi","Kaymakci Kopru","Kaymakci Ucyol","Kurucaova","Ertugrulkoy","Gereli","Buyukavulcuk","Odemis Nikah Sarayi","Odemis Garaj","Odemis Son Durak"],
-      odemis: ["Odemis Son Durak","Odemis Garaj","Odemis Nikah Sarayi","Buyukavulcuk","Gereli","Ertugrulkoy","Kurucaova","Kaymakci Ucyol","Kaymakci Kopru","Odemis Cezaevi","Medeniyet","Cayli Meydan","Cayli Cikis"]
-    };
-
-    const tripMinutes = {
-      workday: { cayli: 55, odemis: 55 },
-      saturday: { cayli: 50, odemis: 50 },
-      sunday: { cayli: 50, odemis: 50 }
-    };
-
-    const labels = {
-      cayli: { from: "Cayli", to: "Odemis" },
-      odemis: { from: "Odemis", to: "Cayli" },
+    const dayLabels = {
       workday: "Is gunu",
       saturday: "Cumartesi",
       sunday: "Pazar"
     };
 
+    const heroTitle = document.getElementById("heroTitle");
+    const heroText = document.getElementById("heroText");
+    const heroTag = document.getElementById("heroTag");
+    const dirForwardTitle = document.getElementById("dirForwardTitle");
+    const dirForwardText = document.getElementById("dirForwardText");
+    const dirReverseTitle = document.getElementById("dirReverseTitle");
+    const dirReverseText = document.getElementById("dirReverseText");
     const timeSwitch = document.getElementById("timeSwitch");
     const timeWrap = document.getElementById("timeWrap");
     const customTime = document.getElementById("customTime");
     const result = document.getElementById("result");
+    const officialLink = document.getElementById("officialLink");
+    const officialNote = document.getElementById("officialNote");
+    const driverCard = document.getElementById("driverCard");
+    const driverPhoto = document.getElementById("driverPhoto");
+
     let useNow = true;
 
     function getDayType(date) {
@@ -400,8 +547,8 @@
     }
 
     function toMinutes(value) {
-      const [h, m] = value.split(":").map(Number);
-      return (h * 60) + m;
+      const parts = value.split(":").map(Number);
+      return (parts[0] * 60) + parts[1];
     }
 
     function formatClock(date) {
@@ -417,30 +564,41 @@
       return m + " dk sonra";
     }
 
-    function getDirection() {
+    function getRouteKey() {
+      return document.querySelector('input[name="route"]:checked').value;
+    }
+
+    function getDirectionKey() {
       return document.querySelector('input[name="dir"]:checked').value;
     }
 
     function getReference(date) {
       if (useNow) {
-        return { text: formatClock(date), minutes: date.getHours() * 60 + date.getMinutes() };
+        return {
+          text: formatClock(date),
+          minutes: (date.getHours() * 60) + date.getMinutes()
+        };
       }
+
       const chosen = customTime.value || "10:00";
-      return { text: chosen, minutes: toMinutes(chosen) };
+      return {
+        text: chosen,
+        minutes: toMinutes(chosen)
+      };
     }
 
-    function estimateStop(dayType, direction, referenceMinutes) {
-      const departures = schedule[dayType][direction];
+    function estimateStop(route, dayType, direction, referenceMinutes) {
+      const departures = route.schedule[dayType][direction];
       const latest = [...departures].reverse().find((item) => toMinutes(item) <= referenceMinutes);
       if (!latest) return null;
 
       const departureMinutes = toMinutes(latest);
       const elapsed = referenceMinutes - departureMinutes;
-      const total = tripMinutes[dayType][direction];
+      const total = route.tripMinutes[dayType][direction];
 
       if (elapsed < 0 || elapsed > total) return null;
 
-      const stops = routeStops[direction];
+      const stops = route.routeStops[direction];
       const ratio = elapsed / total;
       const index = Math.min(stops.length - 1, Math.round(ratio * (stops.length - 1)));
 
@@ -451,15 +609,34 @@
       };
     }
 
+    function renderRouteMeta(route) {
+      heroTitle.innerHTML = route.heroTitle;
+      heroText.textContent = route.heroText;
+      heroTag.textContent = route.heroTag;
+
+      dirForwardTitle.textContent = route.directionCopy.forwardTitle;
+      dirForwardText.textContent = route.directionCopy.forwardText;
+      dirReverseTitle.textContent = route.directionCopy.reverseTitle;
+      dirReverseText.textContent = route.directionCopy.reverseText;
+
+      officialLink.href = route.official.url;
+      officialLink.textContent = route.official.label;
+      officialNote.textContent = route.official.note;
+    }
+
     function render() {
       const now = new Date();
       const dayType = getDayType(now);
-      const direction = getDirection();
-      const departures = schedule[dayType][direction];
+      const route = routes[getRouteKey()];
+      const direction = getDirectionKey();
+      const departures = route.schedule[dayType][direction];
+      const labels = route.labels[direction];
       const reference = getReference(now);
       const next = departures.find((item) => toMinutes(item) >= reference.minutes);
       const nextThree = departures.filter((item) => toMinutes(item) >= reference.minutes).slice(0, 3);
-      const estimate = estimateStop(dayType, direction, reference.minutes);
+      const estimate = estimateStop(route, dayType, direction, reference.minutes);
+
+      renderRouteMeta(route);
 
       let nextHtml = "";
       if (next) {
@@ -494,7 +671,7 @@
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
         const tomorrowType = getDayType(tomorrow);
-        const firstTomorrow = schedule[tomorrowType][direction][0];
+        const firstTomorrow = route.schedule[tomorrowType][direction][0];
         nextHtml = `
           <div class="box">
             <small>Sonraki sefer</small>
@@ -518,10 +695,10 @@
       `;
 
       result.innerHTML = `
-        <div class="pill">${labels[dayType]} • ${labels[direction].from} -> ${labels[direction].to}</div>
+        <div class="pill">${dayLabels[dayType]} &bull; ${labels.from} -> ${labels.to}</div>
         ${nextHtml}
         ${estimateHtml}
-        <p class="note">Saatler resmi 611 sayfasindan alinmistir. Canli ESHOT sayfasina tek tus eklenmistir.</p>
+        <p class="note">611 saatleri eski surumden korundu. 796 Beydag - Odemis saatleri resmi ESHOT sayfasina gore eklendi.</p>
       `;
     }
 
@@ -535,6 +712,15 @@
     customTime.addEventListener("input", render);
     document.getElementById("findBtn").addEventListener("click", render);
     document.querySelectorAll('input[name="dir"]').forEach((input) => input.addEventListener("change", render));
+    document.querySelectorAll('input[name="route"]').forEach((input) => input.addEventListener("change", render));
+
+    driverPhoto.addEventListener("load", () => {
+      driverCard.classList.add("show");
+    });
+
+    driverPhoto.addEventListener("error", () => {
+      driverCard.classList.remove("show");
+    });
 
     render();
   </script>
